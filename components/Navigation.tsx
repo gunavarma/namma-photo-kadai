@@ -31,14 +31,17 @@ const Navigation: React.FC = () => {
   ];
 
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 ease-in-out ${
-        isScrolled
-          ? "bg-luxury-black/95 backdrop-blur-md border-b border-white/5 py-4 shadow-lg"
-          : "bg-transparent py-8"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+    <nav className="fixed top-0 left-0 w-full z-50 transition-all duration-700 ease-in-out py-4">
+      {/* Background Layer - Separated to prevent containing block issues */}
+      <div
+        className={`absolute inset-0 transition-all duration-700 ease-in-out ${
+          isScrolled
+            ? "bg-luxury-black/95 backdrop-blur-md border-b border-white/5 shadow-lg"
+            : "bg-transparent"
+        }`}
+      />
+
+      <div className="relative max-w-7xl mx-auto px-6 flex justify-between items-center z-50">
         {/* Logo */}
         <a href="#" className="relative z-50 group flex flex-col">
           <span className="font-serif text-2xl md:text-3xl tracking-widest text-white group-hover:text-luxury-gold transition-colors duration-500">
@@ -82,26 +85,26 @@ const Navigation: React.FC = () => {
             <Menu size={24} strokeWidth={1} />
           )}
         </button>
+      </div>
 
-        {/* Mobile Menu Overlay */}
-        <div
-          className={`fixed inset-0 bg-luxury-black z-40 flex flex-col justify-center items-center space-y-8 transition-all duration-700 ease-out md:hidden ${
-            mobileMenuOpen
-              ? "translate-y-0 opacity-100 visible"
-              : "-translate-y-full opacity-0 invisible"
-          }`}
-        >
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="font-serif text-3xl text-stone-200 hover:text-luxury-gold italic tracking-wide transition-colors duration-300"
-            >
-              {link.name}
-            </a>
-          ))}
-        </div>
+      {/* Mobile Menu Overlay - Outside the relative container but inside nav */}
+      <div
+        className={`fixed inset-0 bg-luxury-black z-40 flex flex-col justify-center items-center space-y-8 transition-all duration-700 ease-out md:hidden ${
+          mobileMenuOpen
+            ? "translate-y-0 opacity-100 visible"
+            : "-translate-y-full opacity-0 invisible"
+        }`}
+      >
+        {navLinks.map((link) => (
+          <a
+            key={link.name}
+            href={link.href}
+            onClick={() => setMobileMenuOpen(false)}
+            className="font-serif text-3xl text-stone-200 hover:text-luxury-gold italic tracking-wide transition-colors duration-300"
+          >
+            {link.name}
+          </a>
+        ))}
       </div>
     </nav>
   );
