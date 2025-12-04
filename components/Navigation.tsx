@@ -14,6 +14,15 @@ const Navigation: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Prevent background scroll when menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [mobileMenuOpen]);
+
   const navLinks = [
     { name: "Portfolio", href: "#portfolio" },
     { name: "About", href: "#about" },
@@ -25,7 +34,7 @@ const Navigation: React.FC = () => {
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 ease-in-out ${
         isScrolled
-          ? "bg-luxury-black/80 backdrop-blur-md border-b border-white/5 py-4"
+          ? "bg-luxury-black/95 backdrop-blur-md border-b border-white/5 py-4 shadow-lg"
           : "bg-transparent py-8"
       }`}
     >
@@ -40,8 +49,8 @@ const Navigation: React.FC = () => {
           </span>
         </a>
 
-        {/* Desktop Links */}
-        <div className="hidden md:flex space-x-12 items-center">
+        {/* Desktop Links — FULLY DISABLED ON MOBILE */}
+        <div className="hidden md:flex pointer-events-none md:pointer-events-auto space-x-12 items-center">
           {navLinks.map((link) => (
             <a
               key={link.name}
@@ -62,7 +71,7 @@ const Navigation: React.FC = () => {
           </a>
         </div>
 
-        {/* Mobile Toggle */}
+        {/* Mobile Menu Toggle */}
         <button
           className="relative md:hidden text-white z-50 focus:outline-none"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -76,8 +85,10 @@ const Navigation: React.FC = () => {
 
         {/* Mobile Menu Overlay */}
         <div
-          className={`fixed inset-0 bg-luxury-black flex flex-col justify-center items-center space-y-8 transition-transform duration-700 ease-out md:hidden ${
-            mobileMenuOpen ? "translate-y-0" : "-translate-y-full"
+          className={`fixed inset-0 bg-luxury-black z-40 flex flex-col justify-center items-center space-y-8 transition-all duration-700 ease-out md:hidden ${
+            mobileMenuOpen
+              ? "translate-y-0 opacity-100 visible"
+              : "-translate-y-full opacity-0 invisible"
           }`}
         >
           {navLinks.map((link) => (
